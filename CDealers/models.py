@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import CharField, IntegerField
+from django.contrib.auth.models import AbstractUser
 
 class Dealer(models.Model):
     name = models.CharField(max_length=255)
@@ -35,6 +36,14 @@ class Car(models.Model):
     dealer = models.ManyToManyField(Dealer)
     doorscnt = models.IntegerField()
     engine = models.ManyToManyField(Engine)
-    
+
     def __str__(self):
         return f'{self.vendor} {self.model}'    
+
+class CustomUser(AbstractUser):
+    USER_ROLES = (
+        ('admin', 'Admin'),
+        ('moderator', 'Moderator'),
+        ('user', 'User'),
+    )
+    role = models.CharField(max_length=20, choices=USER_ROLES, default='user', verbose_name='Role')        
